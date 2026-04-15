@@ -10,4 +10,12 @@ anyhow = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+actix-web = { workspace = true }
+actix-cors = { workspace = true }
+tracing-subscriber = { workspace = true }
+jag-core = { path = "../jag-core" }
+jag-agents = { path = "../jag-agents" }
+jag-db = { path = "../jag-db" }
+jag-models = { path = "../jag-models" }
+jag-sandbox = { path = "../jag-sandbox" }
 

@@ -3,5 +3,7 @@
 /target_temp/
 /frontend/node_modules/
 /frontend/dist/
+/frontend/release/
+/frontend/bin/
 .DS_Store
 *.env
