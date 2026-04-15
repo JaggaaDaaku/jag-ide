@@ -1,0 +1,36 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/jag-core",
+    "crates/jag-agents",
+    "crates/jag-workflow",
+    "crates/jag-models",
+    "crates/jag-sandbox",
+    "crates/jag-artifacts",
+    "crates/jag-workspace",
+    "crates/jag-git",
+    "crates/jag-lsp",
+    "crates/jag-server",
+    "crates/jag-db",
+]
+
+[workspace.dependencies]
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+actix-web = "4.4"
+actix-cors = "0.7"
+sqlx = { version = "0.7", features = ["sqlite", "runtime-tokio"] }
+redis = "0.24"
+reqwest = { version = "0.11", features = ["json", "stream"] }
+git2 = { version = "0.18", default-features = false }
+dashmap = "5.5"
+async-channel = "2.1"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+petgraph = "0.6"
+async-trait = "0.1"
