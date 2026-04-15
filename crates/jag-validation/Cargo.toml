@@ -1,0 +1,8 @@
+[package]
+name = "jag-validation"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+jag-core = { path = "../jag-core" }
+serde = { workspace = true }

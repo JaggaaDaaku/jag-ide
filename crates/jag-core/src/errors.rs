@@ -63,6 +63,12 @@ pub enum JagError {
     #[error("HTTP error: {0}")]
     Http(#[from] reqwest::Error),
 
+    #[error("Configuration error: {0}")]
+    ConfigurationError(String),
+
+    #[error("Invalid input: {0}")]
+    InvalidInput(String),
+
     /// Catch-all for errors that don't fit a specific variant.
     /// Note: anyhow::Error cannot use #[from] alongside other From impls
     /// due to blanket impl overlap — wrap manually via `.map_err(JagError::Internal)`.
