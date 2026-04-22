@@ -31,8 +31,8 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Check workspace
         run: cargo check --workspace
-      - name: Run core tests
-        run: cargo test -p jag-core
+      - name: Run workspace tests
+        run: cargo test --workspace
       - name: Clippy
         run: cargo clippy --workspace -- -D warnings
 
@@ -55,3 +55,20 @@ jobs:
         run: cd frontend && npx tsc --noEmit
       - name: Build
         run: cd frontend && npm run build
+ 
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: cd frontend && npm ci
+      - name: Install Playwright Browsers
+        run: cd frontend && npx playwright install --with-deps
+      - name: Build
+        run: cd frontend && npm run build
+      - name: Run E2E
+        run: cd frontend && npm run test:e2e

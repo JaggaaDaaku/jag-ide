@@ -1,50 +1,84 @@
-# Jag IDE
+# Jag IDE 🚀
 
-> Agent-first autonomous development platform
+[![CI](https://github.com/JaggaaDaaku/jag-ide/actions/workflows/ci.yml/badge.svg)](https://github.com/JaggaaDaaku/jag-ide/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/JaggaaDaaku/jag-ide/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## Status
-- [x] Phase 1: Foundation (Tasks 1.1.1–1.2.2)
-- [ ] Phase 2: Multi-Agent System (Weeks 13-24)
+> **Agent-first autonomous development platform.** Build complex software by simply describing it.
 
-## Quick Start
+Jag IDE is a command center for autonomous software creation. It orchestrates a team of specialized AI agents (Planner, Backend, Frontend, Integration, Git) to turn your ideas into production-ready code within a secure, sandboxed environment.
 
-### Prerequisites
-- Rust 1.75+ (`rustup install stable`)
-- Node.js 18+ (`nvm install 18`)
-- Ollama (optional, for local LLM): https://ollama.ai
+---
 
-### Build
+## ✨ Key Features
+
+- 🤖 **Multi-Agent Orchestration**: Specialized agents work in parallel to solve complex tasks.
+- 🛡️ **Secure Sandbox**: Tiered execution environment protecting your host system.
+- 📊 **Mission Control**: Real-time dashboard for monitoring agent activity and system health.
+- 🔗 **Artifact Traceability**: Automatic generation and tracking of PRDs, architecture, and code.
+- 🌳 **Model Garden**: Seamless integration with local Ollama models and cloud LLMs (Claude, GPT, Gemini).
+- ✅ **Automated Verification**: Integrated testing and coverage gating for guaranteed quality.
+
+---
+
+## 💻 System Requirements
+
+- **Windows 10+** / **macOS 12+** / **Ubuntu 22.04+**
+- **Ollama 0.1+** (Highly recommended for local LLM inference)
+- **Rust 1.75+** (Required only for building from source)
+- **Node.js 18+** (Required only for building from source)
+
+> [!TIP]
+> For the best out-of-the-box experience with local models, run:
+> `ollama pull qwen2.5:7b`
+
+---
+
+## 🚀 Getting Started
+
+### Installation
+1. Download the latest installer for your platform from the [Releases](https://github.com/JaggaaDaaku/jag-ide/releases) page.
+2. Run the installer and follow the prompts.
+3. Launch Jag IDE and start your first mission!
+
+### Running from Source
 ```bash
-# Check all Rust crates
-cargo check --workspace
+# 1. Clone the repository
+git clone https://github.com/JaggaaDaaku/jag-ide.git
+cd jag-ide
 
-# Run core tests
-cargo test -p jag-core
+# 2. Install dependencies & build
+scripts/build-release.ps1
 
-# Build frontend
-cd frontend && npm install && npm run build
+# 3. Launch
+cd frontend && npm start
 ```
 
-### Configuration
-1. Copy `.env.example` to `.env`
-2. Add at least one LLM API key or ensure Ollama is running
-3. Run the application
+---
 
-## Architecture
-- 12 Rust crates in workspace (see `Cargo.toml`)
-- Electron 28 + React 18 + TypeScript 5.3 frontend
-- SQLite + Redis persistence (local-only; PostgreSQL planned for Phase 3)
-- Ollama + cloud LLM integration
+## 🛠️ Architecture
 
-## Security
-- See [`crates/jag-sandbox/SECURITY.md`](crates/jag-sandbox/SECURITY.md) for threat model
-- API keys managed via `.env` (never commit real values)
-- Sandbox enforces security tiers: Off / Auto / Turbo
+Jag IDE is built with a high-performance Rust backend and a modern React/Electron frontend.
+- **Backend**: 14 specialized Rust crates managing agents, workflow, sandbox, and persistence.
+- **Frontend**: React 18 + TypeScript + Recharts for a data-rich experience.
+- **Database**: Local SQLite + Redis for zero-dependency persistence.
 
-## Contributing
-1. Run `cargo clippy -- -D warnings` before PR
-2. Add tests for new functionality
-3. Update this README if adding new crates
+---
 
-## License
-MIT
+## 🔐 Security & Privacy
+
+- **Sandboxing**: All agent commands run in a hardened sandbox with configurable security tiers (Off, Auto, Turbo).
+- **Privacy**: Local inference via Ollama ensures your code never leaves your machine unless you choose to use cloud providers.
+- **Audit Logs**: Every action taken by an agent is signed and logged for accountability.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to get involved.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

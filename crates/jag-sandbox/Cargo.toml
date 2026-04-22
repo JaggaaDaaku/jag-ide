@@ -1,12 +1,18 @@
 [package]
 name = "jag-sandbox"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
 jag-core = { path = "../jag-core" }
+jag-db = { path = "../jag-db" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
 anyhow = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+base64 = "0.22"
+hmac = "0.12"
+sha2 = "0.10"

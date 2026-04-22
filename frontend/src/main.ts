@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as path from 'path';
+import * as url from 'url';
 import { spawn, ChildProcess } from 'child_process';
 
 let mainWindow: BrowserWindow | null = null;
@@ -54,7 +55,18 @@ function createWindow(): void {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, '..', 'src', 'renderer', 'index.html'));
+  // Robust path resolution — works in both dev and packaged builds
+  const indexPath = path.join(__dirname, '..', 'src', 'renderer', 'index.html');
+  mainWindow.loadURL(url.format({
+    pathname: indexPath,
+    protocol: 'file:',
+    slashes: true,
+  }));
+
+  // Diagnostic: log load failures
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
+    console.error(`[Jag] Page failed to load: ${errorCode} — ${errorDescription}`);
+  });
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show();

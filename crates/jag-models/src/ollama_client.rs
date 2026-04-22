@@ -15,6 +15,8 @@ pub struct OllamaGenerateRequest {
     pub options: Option<OllamaOptions>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub system: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub images: Option<Vec<String>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -51,9 +53,25 @@ struct ListModelsResponse {
     models: Vec<OllamaModel>,
 }
 
+#[derive(Clone)]
 pub struct OllamaClient {
     client: Client,
     base_url: String,
+}
+
+use prometheus::{IntCounterVec, opts, register_int_counter_vec};
+use lazy_static::lazy_static;
+
+lazy_static! {
+    static ref LLM_CALLS: IntCounterVec = register_int_counter_vec!(
+        opts!("jag_llm_calls_total", "Total number of LLM calls"),
+        &["provider", "status"]
+    ).unwrap();
+
+    static ref TOKENS_TOTAL: IntCounterVec = register_int_counter_vec!(
+        opts!("jag_tokens_total", "Total number of tokens used"),
+        &["direction"]
+    ).unwrap();
 }
 
 impl OllamaClient {
@@ -108,7 +126,7 @@ impl OllamaClient {
     }
 
     pub async fn generate(&self, request: OllamaGenerateRequest) -> Result<OllamaGenerateResponse> {
-        self.with_timeout(Duration::from_secs(120), async {
+        let result = self.with_timeout(Duration::from_secs(120), async {
             let url = format!("{}/api/generate", self.base_url);
             
             let response = self.with_retries(|| async {
@@ -119,7 +137,24 @@ impl OllamaClient {
             }).await?;
 
             response.json::<OllamaGenerateResponse>().await.map_err(JagError::Http)
-        }).await
+        }).await;
+
+        match &result {
+            Ok(resp) => {
+                LLM_CALLS.with_label_values(&["ollama", "success"]).inc();
+                if let Some(count) = resp.prompt_eval_count {
+                    TOKENS_TOTAL.with_label_values(&["input"]).inc_by(count as u64);
+                }
+                if let Some(count) = resp.eval_count {
+                    TOKENS_TOTAL.with_label_values(&["output"]).inc_by(count as u64);
+                }
+            }
+            Err(_) => {
+                LLM_CALLS.with_label_values(&["ollama", "error"]).inc();
+            }
+        }
+
+        result
     }
 
     pub async fn list_models(&self) -> Result<Vec<OllamaModel>> {
@@ -177,10 +212,7 @@ impl OllamaClient {
             client.get(&url).send().await.is_ok()
         };
         
-        match tokio::time::timeout(Duration::from_secs(10), future).await {
-            Ok(success) => success,
-            Err(_) => false,
-        }
+        tokio::time::timeout(Duration::from_secs(10), future).await.unwrap_or_default()
     }
 }
 
@@ -190,7 +222,6 @@ mod tests {
     use std::net::SocketAddr;
     use tokio::net::TcpListener;
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
-    use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::Arc;
 
     /// Spawns a background listener that implements HTTP behavior based on the `handler`
@@ -248,6 +279,7 @@ mod tests {
             stream: false,
             options: None,
             system: None,
+            images: None,
         };
 
         let res = client.generate(req).await.expect("Generate failed");

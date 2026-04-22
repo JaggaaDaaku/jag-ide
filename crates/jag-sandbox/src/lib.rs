@@ -28,3 +28,5 @@
 //! - Audit logs are append-only but not cryptographically verified (see Task AUD-001)
 
 pub mod security;
+pub mod executor;
+pub mod audit;

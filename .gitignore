@@ -7,3 +7,4 @@
 /frontend/bin/
 .DS_Store
 *.env
+/workspace/

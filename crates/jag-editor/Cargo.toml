@@ -1,0 +1,30 @@
+[package]
+name = "jag-editor"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+wgpu = "29.0"
+winit = "0.29"
+bytemuck = { version = "1.14", features = ["derive"] }
+tokio = { workspace = true, features = ["full"] }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["fmt"] }
+tiny-skia = "0.11"
+raw-window-handle = "0.6"
+glyphon = "0.11.0"
+lz4_flex = "0.13.0"
+axum = { version = "0.8.9", features = ["ws", "macros"] }
+tokio-tungstenite = "0.29.0"
+serde_json.workspace = true
+serde = { workspace = true, features = ["derive"] }
+futures = "0.3"
+bytes = "1.5"
+anyhow = { workspace = true }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "frame_time"
+harness = false

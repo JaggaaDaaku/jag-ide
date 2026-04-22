@@ -61,12 +61,23 @@ impl SecurityPolicy {
             workspace_root,
             allowed_paths: vec![],
             denied_commands: vec![
-                "rm -rf /".into(),
+                "rm -rf".into(),
                 "dd ".into(),
                 "mkfs".into(),
                 "shutdown".into(),
                 "reboot".into(),
                 "format ".into(),
+                "chmod 777".into(),
+                "chown ".into(),
+                "kill -9".into(),
+                "pkill".into(),
+                "curl ".into(),
+                "wget ".into(),
+                "nc ".into(),
+                "ncat ".into(),
+                "netcat".into(),
+                "/dev/tcp".into(),
+                "/dev/udp".into(),
             ],
             resource_limits: ResourceLimits::default(),
         }
@@ -79,33 +90,48 @@ impl SecurityPolicy {
     pub fn validate_path(&self, path: &Path) -> Result<()> {
         let path_str = path.to_string_lossy();
         
-        // 1. Explicit syntax denial
+        // 1. Basic path traversal check (syntactic)
         if path_str.contains("..") {
             return Err(JagError::PathTraversal(path_str.into_owned()));
         }
-
-        // 2. Resolve paths for safe comparison
-        // If workspace_root does not exist, we just use its absolute form. 
-        let root = std::env::current_dir()
-            .unwrap_or_default()
-            .join(&self.workspace_root);
-            
+ 
+        // 2. Resolve root
+        let root = if self.workspace_root.is_absolute() {
+            self.workspace_root.clone()
+        } else {
+            std::env::current_dir()
+                .unwrap_or_default()
+                .join(&self.workspace_root)
+        };
+        
         let canon_root = root.canonicalize().unwrap_or(root);
         
+        // 3. Resolve target
         let target = if path.is_absolute() {
             path.to_path_buf()
         } else {
             canon_root.join(path)
         };
-
-        // If target exists, canonicalize it to resolve symlinks
+ 
+        // Resolve symlinks if path exists
         let canon_target = target.canonicalize().unwrap_or(target);
-
-        // 3. Strict prefix check mapping
-        if !canon_target.starts_with(&canon_root) {
-            return Err(JagError::PathTraversal(path_str.into_owned()));
+ 
+        // 4. Prefix check
+        #[cfg(windows)]
+        {
+            let s_target = canon_target.to_string_lossy().to_lowercase();
+            let s_root = canon_root.to_string_lossy().to_lowercase();
+            if !s_target.starts_with(&s_root) {
+                return Err(JagError::PathTraversal(path_str.into_owned()));
+            }
         }
-
+        #[cfg(not(windows))]
+        {
+            if !canon_target.starts_with(&canon_root) {
+                return Err(JagError::PathTraversal(path_str.into_owned()));
+            }
+        }
+ 
         Ok(())
     }
 

@@ -1,0 +1,40 @@
+# Jag IDE — Development Settings
+
+[database]
+url = "sqlite:///C:/Users/jagga/Desktop/ide/jagide/jag.db"
+
+[llm]
+ollama_base_url = "http://localhost:11434"
+
+[auth]
+oidc_enabled = false
+oidc_issuer_url = "http://dummy.com"
+oidc_client_id = "dummy"
+oidc_client_secret = "dummy"
+oidc_redirect_url = "http://localhost:8080/auth/callback"
+oidc_scopes = ["openid", "profile", "email"]
+jwt_secret = "dummy_secret"
+hmac_secret = "dummy_secret"
+
+[audit]
+hmac_secret = "dummy_secret"
+
+[cost]
+cloud_rates = { "gpt-4" = 0.03, "claude-3" = 0.015 }
+local_model_strategy = { PerToken = { rate_per_1k = 0.0001 } }
+
+[git]
+provider = "github"
+owner = "JaggaaDaaku"
+repo = "jag-ide"
+prefix = "jag"
+max_slug_words = 5
+
+[validation]
+rust_coverage_threshold = 0.8
+ts_coverage_threshold = 0.8
+mock_mode = true
+
+[telemetry]
+enabled = false
+

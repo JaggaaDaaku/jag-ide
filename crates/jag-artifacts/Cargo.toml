@@ -1,13 +1,15 @@
 [package]
 name = "jag-artifacts"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
+jag-core = { path = "../jag-core" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
-
+chrono = { workspace = true }
+uuid = { workspace = true }

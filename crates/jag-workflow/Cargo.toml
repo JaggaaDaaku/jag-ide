@@ -1,13 +1,21 @@
 [package]
 name = "jag-workflow"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
+jag-core = { path = "../jag-core" }
+jag-db = { path = "../jag-db" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+petgraph = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+async-trait = { workspace = true }
+prometheus = "0.13"
+lazy_static = "1.4"
 

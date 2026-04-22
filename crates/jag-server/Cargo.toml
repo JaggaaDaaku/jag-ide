@@ -1,6 +1,6 @@
 [package]
 name = "jag-server"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
@@ -13,9 +13,33 @@ tracing = { workspace = true }
 actix-web = { workspace = true }
 actix-cors = { workspace = true }
 tracing-subscriber = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+
 jag-core = { path = "../jag-core" }
 jag-agents = { path = "../jag-agents" }
 jag-db = { path = "../jag-db" }
 jag-models = { path = "../jag-models" }
 jag-sandbox = { path = "../jag-sandbox" }
+jag-artifacts = { path = "../jag-artifacts" }
+jag-workspace = { path = "../jag-workspace" }
+jag-workflow = { path = "../jag-workflow" }
+jag-validation = { path = "../jag-validation" }
+jag-git = { path = "../jag-git" }
+jag-benchmarks = { path = "../jag-benchmarks" }
+openidconnect.workspace = true
+rand.workspace = true
+reqwest.workspace = true
+jsonwebtoken.workspace = true
+actix-web-httpauth.workspace = true
+clap.workspace = true
+base64.workspace = true
+oauth2.workspace = true
+sha2.workspace = true
+csv.workspace = true
+prometheus.workspace = true
+actix-web-prometheus.workspace = true
+actix-ws = "0.2"
+futures-util = "0.3"
 
+[dev-dependencies]

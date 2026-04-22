@@ -1,6 +1,6 @@
 [package]
 name = "jag-git"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
@@ -12,3 +12,10 @@ anyhow = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+chrono = { workspace = true }
+octocrab = { workspace = true }
+async-trait = { workspace = true }
+
+[dev-dependencies]
+uuid = { workspace = true }
+

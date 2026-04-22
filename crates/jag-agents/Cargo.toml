@@ -1,10 +1,16 @@
 [package]
 name = "jag-agents"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 
 [dependencies]
 jag-core = { path = "../jag-core" }
+jag-db = { path = "../jag-db" }
+jag-models = { path = "../jag-models" }
+jag-artifacts = { path = "../jag-artifacts" }
+jag-workflow = { path = "../jag-workflow" }
+jag-git = { path = "../jag-git" }
+jag-validation = { path = "../jag-validation" }
 tokio = { workspace = true }
 dashmap = { workspace = true }
 serde = { workspace = true }
@@ -13,3 +19,8 @@ tracing = { workspace = true }
 chrono = { workspace = true }
 uuid = { workspace = true }
 async-trait = { workspace = true }
+anyhow = { workspace = true }
+base64 = "0.22"
+image = "0.25"
+lru = "0.12"
+hex = "0.4"

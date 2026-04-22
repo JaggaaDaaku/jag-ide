@@ -1,3 +1,4 @@
+pub mod coverage;
 use jag_core::errors::{JagError, Result};
 
 /// Sanitize user input before sending to LLM or executing as command.
@@ -30,7 +31,7 @@ pub fn validate_generated_code(code: &str, language: &str) -> ValidationReport {
     
     match language {
         "rust" => {
-            if code.contains("unsafe {") && !code.contains("// SAFETY:") {
+            if (code.contains("unsafe {") || code.contains("unsafe{")) && !code.contains("// SAFETY:") {
                 report.warnings.push("Unsafe block without SAFETY comment".into());
             }
         }
@@ -78,6 +79,7 @@ mod tests {
     #[test]
     fn test_code_validation() {
         let report = validate_generated_code("unsafe { }", "rust");
-        assert!(!report.passed || !report.warnings.is_empty());
+        assert!(!report.warnings.is_empty());
+        assert!(report.warnings.iter().any(|w| w.contains("Unsafe")));
     }
 }
