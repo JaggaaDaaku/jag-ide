@@ -5,11 +5,12 @@ import { contextBridge, ipcRenderer } from 'electron';
  * No direct Node.js access is allowed in the renderer (contextIsolation: true).
  */
 contextBridge.exposeInMainWorld('jagBridge', {
-  // Window controls
   window: {
     minimize: () => ipcRenderer.send('window:minimize'),
     maximize: () => ipcRenderer.send('window:maximize'),
     close:    () => ipcRenderer.send('window:close'),
+    openFolder: () => ipcRenderer.invoke('window:openFolder'),
+    newFile: () => ipcRenderer.invoke('window:newFile'),
   },
 
   // Shell utilities

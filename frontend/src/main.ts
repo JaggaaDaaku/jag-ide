@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { spawn, ChildProcess } from 'child_process';
@@ -78,12 +78,30 @@ function createWindow(): void {
   });
 }
 
+
 ipcMain.on('window:minimize', () => mainWindow?.minimize());
 ipcMain.on('window:maximize', () => {
   if (mainWindow?.isMaximized()) mainWindow.unmaximize();
   else mainWindow?.maximize();
 });
 ipcMain.on('window:close', () => mainWindow?.close());
+
+ipcMain.handle('window:openFolder', async () => {
+  if (!mainWindow) return null;
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory']
+  });
+  return canceled ? null : filePaths[0];
+});
+
+ipcMain.handle('window:newFile', async () => {
+  if (!mainWindow) return null;
+  const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+    title: 'New File',
+    defaultPath: 'Untitled.txt'
+  });
+  return canceled ? null : filePath;
+});
 
 ipcMain.on('shell:openExternal', (_event, url: string) => {
   shell.openExternal(url);

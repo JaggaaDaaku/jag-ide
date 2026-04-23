@@ -103,10 +103,22 @@ const App: React.FC = () => {
                     >
                       🤖 &nbsp; Start Mission Control
                     </button>
-                    <button className="welcome-btn">
+                    <button 
+                      className="welcome-btn"
+                      onClick={async () => {
+                        const path = await (window as any).jagBridge?.window.openFolder();
+                        if (path) console.log('Opened folder:', path);
+                      }}
+                    >
                       📁 &nbsp; Open Folder
                     </button>
-                    <button className="welcome-btn">
+                    <button 
+                      className="welcome-btn"
+                      onClick={async () => {
+                        const path = await (window as any).jagBridge?.window.newFile();
+                        if (path) console.log('New file:', path);
+                      }}
+                    >
                       📄 &nbsp; New File
                     </button>
                   </div>
